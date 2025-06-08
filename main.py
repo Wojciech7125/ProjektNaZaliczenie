@@ -4,16 +4,17 @@ from kivymd.uix.screen import MDScreen
 from kivymd.theming import ThemableBehavior
 from kivy.core.window import Window
 
-from login import LoginScreen
-from register import RegisterScreen
-from order_list import OrderListScreen
-#from order_details import OrderDetailsScreen
-#from order_form import OrderFormScreen
+from screens.login import LoginScreen
+from screens.register import RegisterScreen
+from screens.order_list import OrderListScreen
+#from screens.order_details import OrderDetailsScreen
+#from screens.order_form import OrderFormScreen
 
 
 class MainApp(MDApp):
     def build(self):
         # Ustawienie koloru tła
+        Window.size = (412, 902)
         Window.clearcolor = (0.149, 0.267, 0.298, 1)  # Ciemny zielony/niebieski
 
         # Ustawienie tematu
