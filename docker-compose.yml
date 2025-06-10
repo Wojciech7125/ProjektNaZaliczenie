@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  android-builder:
+    build: .
+    container_name: zlecenia-pro-builder
+    volumes:
+      - .:/app
+      - android-cache:/root/.buildozer
+      - gradle-cache:/root/.gradle
+    environment:
+      - GRADLE_USER_HOME=/root/.gradle
+    working_dir: /app
+    command: |
+      bash -c "
+        echo '🔧 Przygotowywanie środowiska budowania...'
+        
+        # Inicjalizuj buildozer jeśli potrzeba
+        if [ ! -f buildozer.spec ]; then
+          echo '📝 Tworzenie buildozer.spec...'
+          buildozer init
+        fi
+        
+        echo '🚀 Rozpoczynam budowanie APK...'
+        buildozer android debug
+        
+        echo '✅ Budowanie zakończone!'
+        echo '📱 APK znajduje się w folderze bin/'
+        ls -la bin/
+      "
+
+volumes:
+  android-cache:
+    driver: local
+  gradle-cache:
+    driver: local

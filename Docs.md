@@ -7,7 +7,7 @@ zlecenia_pro/
 ├── main.py                    # Główny plik aplikacji
 ├── buildozer.spec            # Konfiguracja Android
 ├── requirements.txt          # Zależności Python
-├──
+├── 
 ├── utils/                    # Narzędzia pomocnicze
 │   ├── __init__.py
 │   ├── data_manager.py       # Zarządzanie danymi
@@ -57,11 +57,11 @@ buildozer android debug
 
 ### **Zalety modułowej struktury:**
 
-✅ **Łatwe utrzymanie** - każdy ekran w osobnym pliku
-✅ **Ponowne użycie** - wspólna klasa BaseScreen
-✅ **Separacja logiki** - DataManager i DialogManager
-✅ **Skalowalne** - łatwe dodawanie nowych funkcji
-✅ **Czytelne** - logiczne podziały kodu
+✅ **Łatwe utrzymanie** - każdy ekran w osobnym pliku  
+✅ **Ponowne użycie** - wspólna klasa BaseScreen  
+✅ **Separacja logiki** - DataManager i DialogManager  
+✅ **Skalowalne** - łatwe dodawanie nowych funkcji  
+✅ **Czytelne** - logiczne podziały kodu  
 
 ### **Główne komponenty:**
 
@@ -78,7 +78,7 @@ buildozer android debug
 {
   "username": {
     "email": "email@example.com",
-    "phone": "+48123456789",
+    "phone": "+48123456789", 
     "company": "Firma ABC",
     "specialization": "Hydraulik",
     "password": "hashedpassword",

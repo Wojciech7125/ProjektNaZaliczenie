@@ -1,0 +1,47 @@
+services:
+  android-builder:
+    build: .
+    container_name: zlecenia-pro-builder
+    volumes:
+      - .:/app
+      - android-cache:/home/builduser/.buildozer
+      - gradle-cache:/home/builduser/.gradle
+    environment:
+      - GRADLE_USER_HOME=/home/builduser/.gradle
+      - BUILDOZER_WARN_ON_ROOT=0
+      - ANDROID_SDK_ROOT=/home/builduser/.buildozer/android/platform/android-sdk
+    working_dir: /app
+    stdin_open: true
+    tty: true
+    command: |
+      bash -c "
+        echo '🔧 Przygotowywanie środowiska budowania...'
+        
+        # Czekaj na SDK i automatycznie akceptuj licencje
+        echo 'Czekam na instalację SDK...'
+        sleep 10
+        
+        # Automatyczne akceptowanie wszystkich licencji Android SDK
+        echo 'Akceptuję licencje Android SDK...'
+        yes | /home/builduser/.buildozer/android/platform/android-sdk/tools/bin/sdkmanager --licenses 2>/dev/null || true
+        yes | /home/builduser/.buildozer/android/platform/android-sdk/tools/bin/sdkmanager --update 2>/dev/null || true
+        
+        if [ ! -f buildozer.spec ]; then
+          echo '📝 Tworzenie buildozer.spec...'
+          buildozer init
+        fi
+        
+        echo '🚀 Rozpoczynam budowanie APK...'
+        echo 'y' | buildozer android debug
+        
+        echo '✅ Budowanie zakończone!'
+        echo '📱 APK znajduje się w folderze bin/'
+        ls -la bin/ || echo 'Folder bin/ nie istnieje'
+        find . -name '*.apk' -type f 2>/dev/null || echo 'Nie znaleziono plików APK'
+      "
+
+volumes:
+  android-cache:
+    driver: local
+  gradle-cache:
+    driver: local
