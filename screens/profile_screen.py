@@ -78,7 +78,7 @@ class ProfileScreen(BaseScreen):
             icon="account-circle",
             icon_size=dp(80),
             theme_icon_color="Custom",
-            icon_color=self.app.theme_cls.primary_color if self.app else "orange"
+            icon_color=self.app.get_color('primary') if self.app else "#ff7f00"
         )
 
         avatar_layout.add_widget(avatar_icon)

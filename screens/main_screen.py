@@ -5,6 +5,7 @@ from kivymd.uix.button import MDRaisedButton, MDIconButton
 from kivymd.uix.label import MDLabel
 from kivymd.uix.gridlayout import MDGridLayout
 from kivymd.uix.list import MDList, ThreeLineListItem
+from utils.theme_helper import ThemeHelper
 from kivy.uix.scrollview import ScrollView
 from kivy.metrics import dp
 
@@ -59,11 +60,10 @@ class MainScreen(BaseScreen):
 
     def create_welcome_card(self):
         """Karta powitalna"""
-        welcome_card = MDCard(
+        welcome_card = ThemeHelper.create_themed_card(
             size_hint=(1, None),
             height=dp(100),
-            elevation=3,
-            padding=dp(15)
+            elevation=0  # Wyłącz całkowicie cień
         )
 
         welcome_layout = MDBoxLayout(orientation='vertical')
@@ -124,9 +124,8 @@ class MainScreen(BaseScreen):
 
     def create_stat_card(self, title, value, icon):
         """Karta statystyki"""
-        card = MDCard(
-            padding=dp(10),
-            elevation=2
+        card = ThemeHelper.create_themed_card(
+            elevation=0  # Wyłącz całkowicie cień
         )
 
         layout = MDBoxLayout(orientation='vertical')
@@ -183,18 +182,13 @@ class MainScreen(BaseScreen):
             height=dp(100)
         )
 
-        new_project_btn = MDRaisedButton(
-            text="NOWE ZLECENIE",
-            size_hint_y=None,
-            height=dp(48),
+        new_project_btn = ThemeHelper.create_primary_button(
+            "NOWE ZLECENIE",
             on_release=lambda x: self.change_screen('new_project')
         )
 
-        browse_projects_btn = MDRaisedButton(
-            text="PRZEGLĄDAJ ZLECENIA",
-            md_bg_color=self.app.theme_cls.primary_dark if self.app else "darkorange",
-            size_hint_y=None,
-            height=dp(48),
+        browse_projects_btn = ThemeHelper.create_secondary_button(
+            "PRZEGLĄDAJ ZLECENIA",
             on_release=lambda x: self.change_screen('projects')
         )
 

@@ -5,18 +5,17 @@ from kivymd.uix.button import MDRaisedButton, MDFlatButton
 from kivymd.uix.textfield import MDTextField
 from kivymd.uix.label import MDLabel
 from kivymd.uix.floatlayout import MDFloatLayout
+from utils.theme_helper import ThemeHelper
 from kivy.metrics import dp
 
 
 class LoginScreen(BaseScreen):
     def build_screen(self):
         # Logo
-        logo_card = MDCard(
+        logo_card = ThemeHelper.create_themed_card(
             size_hint=(0.8, None),
             height=dp(120),
-            pos_hint={'center_x': 0.5, 'center_y': 0.7},
-            md_bg_color=self.app.theme_cls.primary_light if self.app else "orange",
-            elevation=3
+            pos_hint={'center_x': 0.5, 'center_y': 0.7}
         )
 
         logo_text = MDLabel(
@@ -33,7 +32,7 @@ class LoginScreen(BaseScreen):
             orientation='vertical',
             spacing=dp(15),
             size_hint=(0.85, None),
-            height=dp(300),
+            height=dp(380),
             pos_hint={'center_x': 0.5, 'center_y': 0.35}
         )
 
@@ -52,27 +51,29 @@ class LoginScreen(BaseScreen):
             height=dp(48)
         )
 
-        login_btn = MDRaisedButton(
-            text="ZALOGUJ",
-            size_hint_y=None,
-            height=dp(48),
+        login_btn = ThemeHelper.create_primary_button(
+            "ZALOGUJ",
             on_release=self.login_user
         )
 
-        register_btn = MDRaisedButton(
-            text="ZAREJESTRUJ SIĘ",
-            theme_icon_color="Custom",
-            md_bg_color=self.app.theme_cls.primary_dark if self.app else "darkorange",
-            size_hint_y=None,
-            height=dp(48),
+        register_btn = ThemeHelper.create_secondary_button(
+            "ZAREJESTRUJ SIĘ",
             on_release=lambda x: self.change_screen('register')
         )
 
-        forgot_btn = MDFlatButton(
-            text="Zapomniałem hasła...",
-            size_hint_y=None,
-            height=dp(36),
+        forgot_btn = ThemeHelper.create_flat_button(
+            "Zapomniałem hasła...",
             on_release=self.forgot_password
+        )
+
+        # Info o kontach testowych
+        demo_info = MDLabel(
+            text="Konta testowe:\n• demo / demo123\n• test / test123",
+            font_style="Caption",
+            theme_text_color="Secondary",
+            halign="center",
+            size_hint_y=None,
+            height=dp(60)
         )
 
         form_layout.add_widget(self.login_field)
@@ -80,7 +81,9 @@ class LoginScreen(BaseScreen):
         form_layout.add_widget(login_btn)
         form_layout.add_widget(register_btn)
         form_layout.add_widget(forgot_btn)
+        form_layout.add_widget(demo_info)
 
+        # Główny layout dla ekranu
         main_layout = MDFloatLayout()
         main_layout.add_widget(logo_card)
         main_layout.add_widget(form_layout)
@@ -102,8 +105,18 @@ class LoginScreen(BaseScreen):
             self.app.set_current_user(login)
             self.change_screen('main')
             self.clear_form()
+
+            # Pokaż wiadomość powitalną
+            user_data = data_manager.get_user(login)
+            company = user_data.get('company', login) if user_data else login
+            self.show_dialog("Witamy!", f"Zalogowano jako {company}")
         else:
-            self.show_error("Błąd", "Nieprawidłowy login lub hasło")
+            # Sprawdź czy użytkownik istnieje
+            if data_manager and data_manager.user_exists(login):
+                self.show_error("Błąd", "Nieprawidłowe hasło")
+            else:
+                self.show_error("Błąd",
+                                f"Użytkownik '{login}' nie istnieje.\n\nSpróbuj:\n• demo / demo123\n• test / test123\n• lub zarejestruj się")
 
     def forgot_password(self, *args):
         """Obsługa zapomnienia hasła"""

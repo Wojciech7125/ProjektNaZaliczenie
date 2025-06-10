@@ -3,6 +3,7 @@ from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.toolbar import MDTopAppBar
 from kivymd.uix.button import MDIconButton
 from kivymd.uix.label import MDLabel
+from kivymd.uix.floatlayout import MDFloatLayout
 from kivy.metrics import dp
 
 
@@ -12,6 +13,10 @@ class BaseScreen(MDScreen):
     def __init__(self, app=None, **kwargs):
         super().__init__(**kwargs)
         self.app = app
+
+        # Ustaw kolor tła bezpośrednio
+        self.md_bg_color = "#022831"
+
         self.build_screen()
 
     def build_screen(self):
@@ -40,7 +45,7 @@ class BaseScreen(MDScreen):
             orientation='horizontal',
             size_hint_y=None,
             height=dp(60),
-            md_bg_color=self.app.theme_cls.primary_color if self.app else "orange"
+            md_bg_color=self.app.get_color('secondary') if self.app else "#064653"
         )
 
         # Przyciski nawigacji

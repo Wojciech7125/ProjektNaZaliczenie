@@ -1,0 +1,13 @@
+{
+  "group_1_1749575312": {
+    "name": "Grupa",
+    "description": "",
+    "type": "Branżowa",
+    "owner": "MorniG",
+    "visibility": "public",
+    "created_at": "2025-06-10T19:08:32.608105",
+    "members": [
+      "MorniG"
+    ]
+  }
+}

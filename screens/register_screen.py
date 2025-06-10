@@ -29,7 +29,7 @@ class RegisterScreen(BaseScreen):
         logo_card = MDCard(
             size_hint=(1, None),
             height=dp(80),
-            md_bg_color=self.app.theme_cls.primary_light if self.app else "orange",
+            md_bg_color=self.app.get_color('secondary') if self.app else "#064653",
             elevation=2
         )
 

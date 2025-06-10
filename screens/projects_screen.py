@@ -51,7 +51,7 @@ class ProjectsScreen(BaseScreen):
             icon="plus",
             theme_icon_color="Custom",
             icon_color="white",
-            md_bg_color=self.app.theme_cls.primary_color if self.app else "orange",
+            md_bg_color=self.app.get_color('primary') if self.app else "#ff7f00",
             pos_hint={'center_x': 0.9, 'center_y': 0.1},
             on_release=lambda x: self.change_screen('new_project')
         )
