@@ -43,28 +43,21 @@ RUN python3 -m pip install \
     kivy>=2.1.0 \
     kivymd>=1.1.1
 
-# Ustaw Android SDK
-ENV ANDROID_HOME=/opt/android-sdk
-ENV PATH=$PATH:$ANDROID_HOME/tools:$ANDROID_HOME/platform-tools
-
 # Wyłącz ostrzeżenie buildozer o root
 ENV BUILDOZER_WARN_ON_ROOT=0
-
-# Stwórz użytkownika builduser
-RUN useradd -m -s /bin/bash builduser && \
-    echo 'builduser ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 
 # Stwórz katalog roboczy
 WORKDIR /app
 
-# Zmień właściciela katalogu
-RUN chown -R builduser:builduser /app
+# Skopiuj pliki aplikacji
+COPY . /app/
 
-# Przełącz na użytkownika builduser
-USER builduser
+# Stwórz katalog dla Android repositories config
+RUN mkdir -p /root/.android && \
+    echo "count=0" > /root/.android/repositories.cfg
 
-# Kopiuj pliki aplikacji (jako builduser)
-COPY --chown=builduser:builduser . /app/
-
-# Domyślna komenda
-CMD ["buildozer", "android", "debug"]
+# Komenda startowa z automatyczną akceptacją licencji
+CMD echo "🔧 Przygotowywanie środowiska budowania..." && \
+    echo "📝 Akceptowanie licencji Android SDK..." && \
+    (echo "y" | buildozer android debug) || \
+    (yes | buildozer android debug)

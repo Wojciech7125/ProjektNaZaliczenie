@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   android-builder:
     build: .
@@ -10,7 +8,10 @@ services:
       - gradle-cache:/root/.gradle
     environment:
       - GRADLE_USER_HOME=/root/.gradle
+      - BUILDOZER_WARN_ON_ROOT=0
     working_dir: /app
+    stdin_open: true
+    tty: true
     command: |
       bash -c "
         echo '🔧 Przygotowywanie środowiska budowania...'
@@ -21,12 +22,12 @@ services:
           buildozer init
         fi
         
-        echo '🚀 Rozpoczynam budowanie APK...'
-        buildozer android debug
+        echo '🚀 Rozpoczynam budowanie APK z automatyczną akceptacją licencji...'
+        yes | buildozer android debug
         
         echo '✅ Budowanie zakończone!'
         echo '📱 APK znajduje się w folderze bin/'
-        ls -la bin/
+        ls -la bin/ || echo 'Folder bin/ nie istnieje jeszcze'
       "
 
 volumes:
