@@ -42,7 +42,7 @@ class ZleceniaApp(MDApp):
         # Ustaw kolor tła aplikacji na kilka sposobów
         from kivy.core.window import Window
         Window.clearcolor = self.hex_to_rgba('#022831')
-
+        Window.size = (400,902)
         self.sm = MDScreenManager()
         # Ustaw również kolor tła screen managera
         self.sm.md_bg_color = "#022831"

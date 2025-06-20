@@ -1,3 +1,5 @@
+buildozer
+cython==0.29.33
 kivy>=2.1.0,<2.2.0
 kivymd>=1.1.1,<1.2.0
 pillow>=8.0.0

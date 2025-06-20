@@ -1,11 +1,8 @@
-# Dockerfile dla budowania aplikacji Kivy/KivyMD na Androida
 FROM ubuntu:20.04
 
-# Ustaw timezone i non-interactive mode
 ENV DEBIAN_FRONTEND=noninteractive
 ENV TZ=Europe/Warsaw
 
-# Zainstaluj podstawowe zależności
 RUN apt-get update && apt-get install -y \
     git \
     zip \
@@ -31,33 +28,27 @@ RUN apt-get update && apt-get install -y \
     sudo \
     && rm -rf /var/lib/apt/lists/*
 
-# Ustaw Java 8 jako domyślną
 ENV JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
 ENV PATH=$PATH:$JAVA_HOME/bin
 
-# Zainstaluj Python dependencies
 RUN python3 -m pip install --upgrade pip
-RUN python3 -m pip install \
-    buildozer \
-    cython==0.29.33 \
-    kivy>=2.1.0 \
-    kivymd>=1.1.1
 
-# Wyłącz ostrzeżenie buildozer o root
+# Kopiuj requirements.txt do obrazu
+COPY requirements.txt .
+
+# Zainstaluj zależności Pythona
+RUN python3 -m pip install -r requirements.txt
+
 ENV BUILDOZER_WARN_ON_ROOT=0
 
-# Stwórz katalog roboczy
 WORKDIR /app
 
-# Skopiuj pliki aplikacji
+# Teraz kopiuj resztę kodu aplikacji
 COPY . /app/
 
-# Stwórz katalog dla Android repositories config
-RUN mkdir -p /root/.android && \
-    echo "count=0" > /root/.android/repositories.cfg
+RUN mkdir -p /root/.android && echo "count=0" > /root/.android/repositories.cfg
 
-# Komenda startowa z automatyczną akceptacją licencji
-CMD echo "🔧 Przygotowywanie środowiska budowania..." && \
-    echo "📝 Akceptowanie licencji Android SDK..." && \
-    (echo "y" | buildozer android debug) || \
-    (yes | buildozer android debug)
+CMD bash -c "\
+    echo '🔧 Przygotowywanie środowiska budowania...' && \
+    echo '📝 Akceptowanie licencji Android SDK...' && \
+    (yes | buildozer android debug) || (echo 'Błąd podczas budowania')"

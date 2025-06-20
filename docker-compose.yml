@@ -16,7 +16,6 @@ services:
       bash -c "
         echo '🔧 Przygotowywanie środowiska budowania...'
         
-        # Inicjalizuj buildozer jeśli potrzeba
         if [ ! -f buildozer.spec ]; then
           echo '📝 Tworzenie buildozer.spec...'
           buildozer init
